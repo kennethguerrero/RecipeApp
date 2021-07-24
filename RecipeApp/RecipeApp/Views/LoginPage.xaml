@@ -1,0 +1,49 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:fontAwesome="clr-namespace:FontAwesome"
+             mc:Ignorable="d"
+             x:Class="RecipeApp.Views.LoginPage"
+             Shell.NavBarIsVisible="False"
+             BackgroundColor="{StaticResource WindowBackgroundColorDark}">
+    
+    <ContentPage.Content>
+        <StackLayout Spacing="15"
+                     VerticalOptions="Center">
+
+            <Image Source="logo.png" 
+                   Aspect="AspectFit"
+                   HeightRequest="200"/>
+            
+            <StackLayout HorizontalOptions="Center">
+                <Label Text="The answer to your 'ano kayang ma-luto?' questions."
+                       Style="{StaticResource LabelRegular}"/>
+            </StackLayout>
+            
+            <StackLayout BackgroundColor="{StaticResource SystemBlack2}"
+                         Spacing="15"
+                         Padding="15">
+                <Entry Placeholder="USERNAME" 
+                       Text="{Binding UserName}"
+                       Style="{StaticResource EntryMedium}"/>
+                <Entry Placeholder="PASSWORD" 
+                       IsPassword="True"
+                       Text="{Binding Password}"
+                       Style="{StaticResource EntryMedium}"/>
+                <Button Text="Login sign-in-alt"
+                        FontFamily="FA-Solid"
+                        HorizontalOptions="FillAndExpand"
+                        Command="{Binding LoginCommand}"
+                        Style="{StaticResource ButtonGreen}"/>
+                <Button Text="Enter as Guest users"
+                        FontFamily="FA-Solid"
+                        HorizontalOptions="FillAndExpand"
+                        Command="{Binding LoginAsGuestCommand}"
+                        Style="{StaticResource ButtonGray}"/>
+            </StackLayout>
+        </StackLayout>
+    </ContentPage.Content>
+    
+</ContentPage>

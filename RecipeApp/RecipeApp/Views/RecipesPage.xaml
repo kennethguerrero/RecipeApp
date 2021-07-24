@@ -1,0 +1,116 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="RecipeApp.Views.RecipesPage"
+             xmlns:local="clr-namespace:RecipeApp.ViewModels"
+             xmlns:model="clr-namespace:RecipeApp.Models"
+             xmlns:android="clr-namespace:Xamarin.Forms.PlatformConfiguration.AndroidSpecific;assembly=Xamarin.Forms.Core"
+             Title="{Binding Title}"
+             BackgroundColor="{StaticResource SystemBlack}">
+
+    <ContentPage.BindingContext>
+        <local:RecipesViewModel />
+    </ContentPage.BindingContext>
+
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Command="{Binding AddCommand}"
+                     Text="Add"/>
+    </ContentPage.ToolbarItems>
+
+    <!--<RefreshView Command="{Binding LoadRecipesCommand}"
+                 IsRefreshing="{Binding IsBusy, Mode=OneWay}">-->
+        
+        <!--<CollectionView x:Name="RecipesListView"
+                        ItemsSource="{Binding Recipes}"
+                        SelectionMode="Single"
+                        SelectedItem="{Binding SelectedRecipe, Mode=TwoWay}">
+
+            <CollectionView.EmptyView>
+                <StackLayout Padding="12">
+                    <Label HorizontalOptions="Center" Text="No Recipes" />
+                </StackLayout>
+            </CollectionView.EmptyView>
+
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <SwipeView android:SwipeView.SwipeTransitionMode="Drag">
+                        <SwipeView.RightItems>
+                            <SwipeItems>
+                                <SwipeItem BackgroundColor="{StaticResource SystemGreen}"
+                                           Command="{Binding Source={RelativeSource AncestorType={x:Type local:RecipesViewModel}}, Path=RateCommand}" 
+                                           CommandParameter="{Binding .}"
+                                           Text="Rate"/>
+                            </SwipeItems>
+                        </SwipeView.RightItems>
+                        <Grid Padding="5">
+                            <Frame HasShadow="True"
+                                   CornerRadius="20"
+                                   BackgroundColor="{StaticResource SystemBlack3}"
+                                   BorderColor="{StaticResource SystemBlack4}">
+                                <StackLayout x:DataType="model:Recipe">
+                                    <Label Text="{Binding Name}" 
+                                           Style="{StaticResource LabelBold}"/>
+
+                                    <StackLayout.GestureRecognizers>
+                                        <TapGestureRecognizer 
+                                            NumberOfTapsRequired="1"
+                                            Command="{Binding Source={RelativeSource AncestorType={x:Type local:RecipesViewModel}}, Path=ItemTapped}"
+                                            CommandParameter="{Binding .}">
+                                        </TapGestureRecognizer>
+                                    </StackLayout.GestureRecognizers>
+                                </StackLayout>
+                            </Frame>
+                        </Grid>
+                    </SwipeView>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+            
+        </CollectionView>-->
+        
+    <!--</RefreshView>-->
+
+    <ListView IsPullToRefreshEnabled="True"
+              HasUnevenRows="True"
+              ItemsSource="{Binding Recipes}"
+              IsRefreshing="{Binding IsBusy, Mode=OneWay}"
+              RefreshCommand="{Binding LoadRecipesCommand}"
+              SelectedItem="{Binding SelectedRecipe, Mode=TwoWay}">
+
+        <ListView.ItemTemplate>
+            <DataTemplate x:DataType="model:Recipe">
+                
+                <ViewCell>
+                    <SwipeView android:SwipeView.SwipeTransitionMode="Drag"
+                               BackgroundColor="{StaticResource SystemBlack}">
+                        <SwipeView.RightItems>
+                            <SwipeItems>
+                                <SwipeItem BackgroundColor="{StaticResource SystemGreen}"
+                                           Command="{Binding Source={RelativeSource AncestorType={x:Type local:RecipesViewModel}}, Path=RateCommand}" 
+                                           CommandParameter="{Binding .}"
+                                           Text="Rate"/>
+                            </SwipeItems>
+                        </SwipeView.RightItems>
+                        <Grid Padding="5">
+                            <Grid.RowDefinitions>
+                                <RowDefinition />
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition />
+                            </Grid.ColumnDefinitions>
+                            <Frame HasShadow="True"
+                                   CornerRadius="20"
+                                   BackgroundColor="{StaticResource SystemBlack3}"
+                                   BorderColor="{StaticResource SystemBlack4}">
+                                <StackLayout Grid.Column="0">
+                                    <Label Text="{Binding Name}" 
+                                           Style="{StaticResource LabelBold}"/>
+                                </StackLayout>
+                            </Frame>
+                        </Grid>
+                    </SwipeView>
+                </ViewCell>
+            </DataTemplate>
+        </ListView.ItemTemplate>
+    </ListView>
+
+</ContentPage>

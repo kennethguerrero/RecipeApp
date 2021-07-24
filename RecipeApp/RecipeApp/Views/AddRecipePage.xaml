@@ -1,0 +1,77 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="RecipeApp.Views.AddRecipePage"
+             Shell.PresentationMode="ModalAnimated"
+             xmlns:viewModel="clr-namespace:RecipeApp.ViewModels"
+             Title="{Binding Title}"
+             BackgroundColor="{StaticResource SystemBlack}">
+
+    <ContentPage.BindingContext>
+        <viewModel:AddRecipeViewModel />
+    </ContentPage.BindingContext>
+
+    <ContentPage.Content>
+        <StackLayout Spacing="5"
+                     Padding="15"
+                     VerticalOptions="Center"
+                     BackgroundColor="{StaticResource SystemBlack3}">
+            <Label Text="Type of Meal" 
+                   Style="{StaticResource LabelMedium}"/>
+            <Picker ItemsSource="{Binding RecipeTypes}"
+                    ItemDisplayBinding="{Binding Value}"
+                    SelectedItem="{Binding SelectedRecipeType, Mode=TwoWay}"
+                    Style="{StaticResource PickerRegular}"/>
+            <Label Text="Name" 
+                   Style="{StaticResource LabelMedium}"/>
+            <Entry Text="{Binding Name}"
+                   Style="{StaticResource EntryRegular}">
+                <Entry.Keyboard>
+                    <Keyboard x:FactoryMethod="Create">
+                        <x:Arguments>
+                            <KeyboardFlags>Suggestions,CapitalizeWord</KeyboardFlags>
+                        </x:Arguments>
+                    </Keyboard>
+                </Entry.Keyboard>
+            </Entry>
+            <Label Text="Ingredients" 
+                   Style="{StaticResource LabelMedium}"/>
+            <Editor AutoSize="TextChanges"
+                    Text="{Binding Ingredients}"
+                    Style="{StaticResource EntryRegular}">
+                <Editor.Keyboard>
+                    <Keyboard x:FactoryMethod="Create">
+                        <x:Arguments>
+                            <KeyboardFlags>Suggestions,CapitalizeSentence</KeyboardFlags>
+                        </x:Arguments>
+                    </Keyboard>
+                </Editor.Keyboard>
+            </Editor>
+            <Label Text="Directions" 
+                   Style="{StaticResource LabelMedium}"/>
+            <Editor AutoSize="TextChanges"
+                    Text="{Binding Directions}"
+                    Style="{StaticResource EntryRegular}">
+                <Editor.Keyboard>
+                    <Keyboard x:FactoryMethod="Create">
+                        <x:Arguments>
+                            <KeyboardFlags>Suggestions,CapitalizeSentence</KeyboardFlags>
+                        </x:Arguments>
+                    </Keyboard>
+                </Editor.Keyboard>
+            </Editor>
+
+            <StackLayout Orientation="Horizontal">
+                <Button Text="Cancel" 
+                        Command="{Binding CancelCommand}"
+                        HorizontalOptions="FillAndExpand"
+                        Style="{StaticResource ButtonGray}"/>
+                <Button Text="Save" 
+                        Command="{Binding SaveCommand}"
+                        HorizontalOptions="FillAndExpand"
+                        Style="{StaticResource ButtonGreen}"/>
+            </StackLayout>
+        </StackLayout>
+    </ContentPage.Content>
+    
+</ContentPage>

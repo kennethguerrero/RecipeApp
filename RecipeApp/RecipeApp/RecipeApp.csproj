@@ -1,0 +1,48 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <ProduceReferenceAssembly>true</ProduceReferenceAssembly>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Resources\Fonts\fa-brands-400.otf" />
+    <None Remove="Resources\Fonts\fa-regular-400.otf" />
+    <None Remove="Resources\Fonts\fa-solid-900.otf" />
+    <None Remove="Resources\Fonts\Ubuntu-Bold.ttf" />
+    <None Remove="Resources\Fonts\Ubuntu-Light.ttf" />
+    <None Remove="Resources\Fonts\Ubuntu-Medium.ttf" />
+    <None Remove="Resources\Fonts\Ubuntu-Regular.ttf" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Fonts\fa-brands-400.otf" />
+    <EmbeddedResource Include="Resources\Fonts\fa-regular-400.otf" />
+    <EmbeddedResource Include="Resources\Fonts\fa-solid-900.otf" />
+    <EmbeddedResource Include="Resources\Fonts\Ubuntu-Bold.ttf" />
+    <EmbeddedResource Include="Resources\Fonts\Ubuntu-Light.ttf" />
+    <EmbeddedResource Include="Resources\Fonts\Ubuntu-Medium.ttf" />
+    <EmbeddedResource Include="Resources\Fonts\Ubuntu-Regular.ttf" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+    <PackageReference Include="Xamarin.Forms" Version="5.0.0.2083" />  
+    <PackageReference Include="Xamarin.Essentials" Version="1.7.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="Views\AddRecipePage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Views\RecipeDetailPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Views\RecipesPage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Views\SelectRecipePage.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+    </EmbeddedResource>
+  </ItemGroup>
+</Project>

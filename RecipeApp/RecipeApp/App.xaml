@@ -1,0 +1,118 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Application xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="RecipeApp.App">
+    <!--
+        Define global resources and styles here, that apply to all pages in your app.
+    -->
+    <Application.Resources>
+        <ResourceDictionary>
+            <Color x:Key="Primary">#2196F3</Color>
+            <Color x:Key="TextColor">#000000</Color>
+            <Color x:Key="TextColorDark">White</Color>
+
+            <Color x:Key="WindowBackgroundColor">White</Color>
+            <Color x:Key="WindowBackgroundColorDark">Black</Color>
+
+            <Color x:Key="CardBackground">White</Color>
+            <Color x:Key="CardBackgroundDark">#1C1C1E</Color>
+
+            <Color x:Key="SystemGray">#8E8E93</Color>
+            <Color x:Key="SystemGray2">#AEAEB2</Color>
+            <Color x:Key="SystemGray3">#C7C7CC</Color>
+            <Color x:Key="SystemGray4">#D1D1D6</Color>
+            <Color x:Key="SystemGray5">#E5E5EA</Color>
+            <Color x:Key="SystemGray6">#F2F2F7</Color>
+
+            <Color x:Key="SystemBlack">black</Color>
+            <Color x:Key="SystemBlack2">#141414</Color>
+            <Color x:Key="SystemBlack3">#1f1f1f</Color>
+            <Color x:Key="SystemBlack4">#292929</Color>
+            <Color x:Key="SystemBlack5">#333333</Color>
+
+            <Color x:Key="SystemGreen">#34C759</Color>
+            <Color x:Key="SystemBlue">#007AFF</Color>
+
+            <x:String x:Key="IconCoffee">&#xf0f4;</x:String>
+
+            <Style x:Key="BaseLabel" TargetType="Label">
+                <Setter Property="TextColor"
+                        Value="{StaticResource TextColorDark}" />
+                <Setter Property="FontSize"
+                        Value="15" />
+            </Style>
+
+            <Style x:Key="LabelRegular" TargetType="Label" BasedOn="{StaticResource BaseLabel}">
+                <Setter Property="FontFamily"
+                        Value="Ub-Regular" />
+            </Style>
+            <Style x:Key="LabelLight" TargetType="Label" BasedOn="{StaticResource BaseLabel}">
+                <Setter Property="FontFamily"
+                        Value="Ub-Light" />
+            </Style>
+            <Style x:Key="LabelMedium" TargetType="Label" BasedOn="{StaticResource BaseLabel}">
+                <Setter Property="FontFamily"
+                        Value="Ub-Medium" />
+            </Style>
+            <Style x:Key="LabelBold" TargetType="Label" BasedOn="{StaticResource BaseLabel}">
+                <Setter Property="FontFamily"
+                        Value="Ub-Bold" />
+            </Style>
+
+            <Style x:Key="BaseEntry" TargetType="Entry">
+                <Setter Property="TextColor"
+                        Value="{StaticResource TextColorDark}" />
+                <Setter Property="FontSize"
+                        Value="15" />
+                <Setter Property="PlaceholderColor"
+                        Value="{StaticResource SystemGray}" />
+            </Style>
+            
+            <Style x:Key="EntryLight" TargetType="Entry" BasedOn="{StaticResource BaseEntry}">
+                <Setter Property="FontFamily"
+                        Value="Ub-Light" />
+            </Style>
+            <Style x:Key="EntryRegular" TargetType="Entry" BasedOn="{StaticResource BaseEntry}">
+                <Setter Property="FontFamily"
+                        Value="Ub-Regular" />
+            </Style>
+            <Style x:Key="EntryMedium" TargetType="Entry" BasedOn="{StaticResource BaseEntry}">
+                <Setter Property="FontFamily"
+                        Value="Ub-Medium" />
+            </Style>
+            <Style x:Key="EntryBold" TargetType="Entry" BasedOn="{StaticResource BaseEntry}">
+                <Setter Property="FontFamily"
+                        Value="Ub-Bold" />
+            </Style>
+
+            <Style x:Key="BasePicker" TargetType="Picker">
+                <Setter Property="TextColor"
+                        Value="{StaticResource TextColorDark}" />
+                <Setter Property="FontSize"
+                        Value="15" />
+            </Style>
+
+            <Style x:Key="PickerRegular" TargetType="Picker" BasedOn="{StaticResource BasePicker}">
+                <Setter Property="FontFamily"
+                        Value="Ub-Regular" />
+            </Style>
+
+            <Style x:Key="ButtonGreen" TargetType="Button">
+                <Setter Property="TextColor"
+                        Value="{StaticResource TextColorDark}" />
+                <Setter Property="FontSize"
+                        Value="15" />
+                <Setter Property="FontFamily"
+                        Value="Ub-Medium" />
+                <Setter Property="BackgroundColor"
+                        Value="{StaticResource SystemGreen}" />
+                <Setter Property="FontAttributes"
+                        Value="Bold" />
+            </Style>
+            <Style x:Key="ButtonGray" TargetType="Button" BasedOn="{StaticResource ButtonGreen}">
+                <Setter Property="BackgroundColor"
+                        Value="{StaticResource SystemBlue}" />
+            </Style>
+        </ResourceDictionary>        
+    </Application.Resources>
+</Application>

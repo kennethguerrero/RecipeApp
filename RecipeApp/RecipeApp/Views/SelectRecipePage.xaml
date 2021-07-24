@@ -1,0 +1,38 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="RecipeApp.Views.SelectRecipePage"
+             xmlns:viewModel="clr-namespace:RecipeApp.ViewModels"
+             xmlns:fontAwesome="clr-namespace:FontAwesome"
+             Title="{Binding Title}"
+             BackgroundColor="{StaticResource SystemBlack}">
+
+    <ContentPage.BindingContext>
+        <viewModel:SelectRecipeViewModel />
+    </ContentPage.BindingContext>
+
+    <ContentPage.Content>
+        <ScrollView VerticalOptions="FillAndExpand">
+            <StackLayout Spacing="15"
+                         Padding="15">
+
+                <RefreshView x:DataType="viewModel:SelectRecipeViewModel"
+                        Command="{Binding SelectRecipeCommand}"
+                        IsRefreshing="{Binding IsBusy, Mode=TwoWay}">
+                    <Image Source="{Binding Image}" />
+                </RefreshView>
+                
+                <Label Text="{Binding Name}" 
+                       Style="{StaticResource LabelBold}"/>
+                <Label Text="{Binding Ingredients}" 
+                       Style="{StaticResource LabelRegular}"/>
+                <Label Text="{Binding Directions}" 
+                       Style="{StaticResource LabelRegular}"/>
+                <Button Text="Pick a Recipe dice"
+                        FontFamily="FA-Solid"
+                        Command="{Binding SelectRecipeCommand}"
+                        Style="{StaticResource ButtonGreen}"/>
+            </StackLayout>
+        </ScrollView>
+    </ContentPage.Content>
+</ContentPage>

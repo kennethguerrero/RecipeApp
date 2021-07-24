@@ -1,0 +1,48 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="RecipeApp.Views.AboutPage"
+             xmlns:vm="clr-namespace:RecipeApp.ViewModels"
+             xmlns:fontAwesome="clr-namespace:FontAwesome"
+             Title="{Binding Title}"
+             BackgroundColor="{StaticResource SystemBlack}">
+
+    <ContentPage.BindingContext>
+        <vm:AboutViewModel />
+    </ContentPage.BindingContext>
+
+    <ScrollView>
+        <StackLayout Padding="15"
+                     Spacing="15">
+            <StackLayout>
+                <StackLayout BackgroundColor="White">
+                    <Image Source="https://i.imgur.com/G4igBbr.png" 
+                           VerticalOptions="Center" />
+                </StackLayout>
+
+                <Label Text="The Chef"
+                       Style="{StaticResource LabelBold}" />
+
+                <Label Text="Is not really a chef. Just a home cook who loves to cook recipes that are inspired by the famous - Chef Youtube and the all time favorite - Chef Google."
+                       Style="{StaticResource LabelLight}" />
+
+                <Label Text="Now that you're full. Treat yourself with a cup of coffee."
+                       Style="{StaticResource LabelLight}" />
+                
+                <!--<Label Text="{x:Static fontAwesome:FontAwesomeIcons.DiceSix}" 
+                       Style="{StaticResource LabelLight}"
+                       FontFamily="FA-Solid"/>-->
+
+                <!--<Label Text="{StaticResource IconCoffee}" 
+                       TextColor="White"
+                       FontFamily="FA-Solid"/>-->
+            </StackLayout>
+
+            <Button FontAttributes="Bold"
+                    Text="buy coffee"
+                    FontFamily="FA-Solid"
+                    Command="{Binding OpenWebCommand}"
+                    Style="{StaticResource ButtonGreen}"/>
+        </StackLayout>
+    </ScrollView>
+</ContentPage>
