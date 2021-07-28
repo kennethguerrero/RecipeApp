@@ -4,6 +4,7 @@
              x:Class="RecipeApp.Views.AboutPage"
              xmlns:vm="clr-namespace:RecipeApp.ViewModels"
              xmlns:fontAwesome="clr-namespace:FontAwesome"
+             xmlns:ffImageLoading="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
              Title="{Binding Title}"
              BackgroundColor="{StaticResource SystemBlack}">
 
@@ -15,10 +16,14 @@
         <StackLayout Padding="15"
                      Spacing="15">
             <StackLayout>
-                <StackLayout BackgroundColor="White">
-                    <Image Source="https://i.imgur.com/G4igBbr.png" 
-                           VerticalOptions="Center" />
-                </StackLayout>
+                <ffImageLoading:CachedImage Aspect="AspectFit"
+                                            DownsampleToViewSize="True"
+                                            LoadingPlaceholder="https://i.imgur.com/3O6kVa5.png"
+                                            ErrorPlaceholder="https://i.imgur.com/BkboBY8.png"
+                                            Source="https://i.imgur.com/G4igBbr.png"
+                                            CacheDuration="5"
+                                            FadeAnimationEnabled="True">
+                </ffImageLoading:CachedImage>
 
                 <Label Text="The Chef"
                        Style="{StaticResource LabelBold}" />
@@ -28,7 +33,7 @@
 
                 <Label Text="Now that you're full. Treat yourself with a cup of coffee."
                        Style="{StaticResource LabelLight}" />
-                
+
                 <!--<Label Text="{x:Static fontAwesome:FontAwesomeIcons.DiceSix}" 
                        Style="{StaticResource LabelLight}"
                        FontFamily="FA-Solid"/>-->
