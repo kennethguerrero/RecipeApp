@@ -5,7 +5,13 @@ using Android.Content.PM;
 using Android.Runtime;
 using Android.OS;
 using FFImageLoading.Forms.Platform;
+using RecipeApp.Services;
+using Android.Widget;
+using Xamarin.Essentials;
+using Xamarin.Forms;
+using RecipeApp.Droid;
 
+[assembly:Dependency(typeof(Toaster))]
 namespace RecipeApp.Droid
 {
     [Activity(Label = "AnoUlam?", Theme = "@style/MainTheme", MainLauncher = true, ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation | ConfigChanges.UiMode | ConfigChanges.ScreenLayout | ConfigChanges.SmallestScreenSize )]
@@ -27,6 +33,14 @@ namespace RecipeApp.Droid
             Xamarin.Essentials.Platform.OnRequestPermissionsResult(requestCode, permissions, grantResults);
 
             base.OnRequestPermissionsResult(requestCode, permissions, grantResults);
+        }
+    }
+
+    public class Toaster : IToast
+    {
+        public void MakeToast(string message)
+        {
+            Toast.MakeText(Platform.AppContext, message, ToastLength.Long).Show();
         }
     }
 }

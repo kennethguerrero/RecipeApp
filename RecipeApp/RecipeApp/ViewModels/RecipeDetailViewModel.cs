@@ -10,9 +10,11 @@ namespace RecipeApp.ViewModels
     [QueryProperty(nameof(RecipeId), nameof(RecipeId))]
     public class RecipeDetailViewModel : BaseViewModel
     {
+        IRecipeService recipeService;
         public RecipeDetailViewModel()
         {
             Title = "Recipe Detail";
+            recipeService = DependencyService.Get<IRecipeService>();
         }
 
         string name;
@@ -59,7 +61,7 @@ namespace RecipeApp.ViewModels
         {
             try
             {
-                var recipe = await RecipeService.GetRecipe(recipeId);
+                var recipe = await recipeService.GetRecipe(recipeId);
                 RowKey = recipe.RowKey;
                 Name = recipe.Name;
                 Ingredients = recipe.Ingredients;

@@ -16,6 +16,8 @@ namespace RecipeApp.ViewModels
         public Command CancelCommand { get; }
         public Command SaveCommand { get; }
 
+        IRecipeService recipeService;
+
         public AddRecipeViewModel()
         {
             Title = "Add Recipe";
@@ -23,6 +25,8 @@ namespace RecipeApp.ViewModels
             SaveCommand = new Command(Save, ValidateSave);
             PropertyChanged +=
                 (_, __) => SaveCommand.ChangeCanExecute();
+
+            recipeService = DependencyService.Get<IRecipeService>();
         }
 
         private async void Save()
@@ -34,7 +38,7 @@ namespace RecipeApp.ViewModels
                 Directions = Directions,
                 Type = SelectedRecipeType.Value
             };
-            string message = await RecipeService.AddRecipe(newRecipe);
+            string message = await recipeService.AddRecipe(newRecipe);
             await Shell.Current.DisplayAlert("Success!", message, "OK");
             await Shell.Current.GoToAsync("..");
         }

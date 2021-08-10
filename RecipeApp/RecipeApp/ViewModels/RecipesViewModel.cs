@@ -2,10 +2,8 @@
 using RecipeApp.Services;
 using RecipeApp.Views;
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
-using System.Text;
 using System.Threading.Tasks;
 using Xamarin.Forms;
 
@@ -22,6 +20,8 @@ namespace RecipeApp.ViewModels
 
         public Command<Recipe> DeleteCommand { get; }
 
+        IRecipeService recipeService;
+
         public RecipesViewModel()
         {
             Title = "Recipes";
@@ -33,6 +33,8 @@ namespace RecipeApp.ViewModels
             ItemTapped = new Command<Recipe>(Selected);
             RateCommand = new Command<Recipe>(Rate);
             DeleteCommand = new Command<Recipe>(Delete);
+
+            recipeService = DependencyService.Get<IRecipeService>();
 
             Initialization = LoadRecipes();
         }
@@ -49,14 +51,14 @@ namespace RecipeApp.ViewModels
         }
 
         private Task Initialization { get; set; }
-        async Task LoadRecipes()
+        public async Task LoadRecipes()
         {
             IsBusy = true;
 
             try
             {
                 Recipes.Clear();
-                var recipes = await RecipeService.GetRecipes();
+                var recipes = await recipeService.GetRecipes();
                 foreach (var recipe in recipes)
                 {
                     Recipes.Add(recipe);
@@ -70,6 +72,8 @@ namespace RecipeApp.ViewModels
             {
                 IsBusy = false;
             }
+
+            DependencyService.Get<IToast>()?.MakeToast("All Recipes Loaded");
         }
 
         Recipe previouslySelected;
@@ -120,7 +124,7 @@ namespace RecipeApp.ViewModels
 
             if (result)
             {
-                await RecipeService.DeleteRecipe(recipe.PartitionKey, recipe.RowKey);
+                await recipeService.DeleteRecipe(recipe.PartitionKey, recipe.RowKey);
                 await LoadRecipes();
             }
         }

@@ -1,24 +1,27 @@
 ﻿using Newtonsoft.Json;
 using RecipeApp.Models;
+using RecipeApp.Services;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
+using Xamarin.Forms;
 
+[assembly:Dependency(typeof(RecipeService))]
 namespace RecipeApp.Services
 {
-    public static class RecipeService
+    public class RecipeService : IRecipeService
     {
         static HttpClient httpClient;
-        
+
         static void Init()
         {
             if (httpClient == null)
                 httpClient = new HttpClient();
         }
 
-        public static async Task<string> AddRecipe(Recipe recipe)
+        public async Task<string> AddRecipe(Recipe recipe)
         {
             Init();
 
@@ -27,7 +30,7 @@ namespace RecipeApp.Services
             return message;
         }
 
-        public static async Task<IEnumerable<Recipe>> GetRecipes()
+        public async Task<IEnumerable<Recipe>> GetRecipes()
         {
             Init();
 
@@ -39,7 +42,7 @@ namespace RecipeApp.Services
             return list;
         }
 
-        public static async Task<Recipe> GetRecipe(string id)
+        public async Task<Recipe> GetRecipe(string id)
         {
             Init();
 
@@ -51,7 +54,7 @@ namespace RecipeApp.Services
             return selectedRecipe;
         }
 
-        public static async Task<string> DeleteRecipe(string partitionKey, string rowKey)
+        public async Task<string> DeleteRecipe(string partitionKey, string rowKey)
         {
             Init();
 

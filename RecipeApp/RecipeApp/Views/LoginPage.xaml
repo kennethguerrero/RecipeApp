@@ -18,7 +18,7 @@
                    HeightRequest="200"/>
             
             <StackLayout HorizontalOptions="Center">
-                <Label Text="The answer to your 'ano kayang ma-luto?' questions."
+                <Label Text="*Some tagline here*"
                        Style="{StaticResource LabelRegular}"/>
             </StackLayout>
             

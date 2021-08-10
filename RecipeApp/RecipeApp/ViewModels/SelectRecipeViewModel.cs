@@ -1,10 +1,8 @@
 ﻿using RecipeApp.Models;
 using RecipeApp.Services;
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
-using System.Text;
 using System.Threading.Tasks;
 using Xamarin.Forms;
 
@@ -15,11 +13,14 @@ namespace RecipeApp.ViewModels
         public ObservableCollection<Recipe> Recipes { get; }
 
         public Command SelectRecipeCommand { get; }
+
+        IRecipeService recipeService;
         public SelectRecipeViewModel()
         {
             Title = "Select Recipe";
             Recipes = new ObservableCollection<Recipe>();
             SelectRecipeCommand = new Command(Select);
+            recipeService = DependencyService.Get<IRecipeService>();
 
             Initialization = LoadRecipes();
         }
@@ -60,7 +61,7 @@ namespace RecipeApp.ViewModels
             try
             {
                 Recipes.Clear();
-                var recipes = await RecipeService.GetRecipes();
+                var recipes = await recipeService.GetRecipes();
                 foreach (var recipe in recipes)
                 {
                     Recipes.Add(recipe);

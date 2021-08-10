@@ -13,7 +13,6 @@ namespace RecipeApp
         {
             InitializeComponent();
 
-            DependencyService.Register<MockDataStore>();
             MainPage = new AppShell();
         }
 
