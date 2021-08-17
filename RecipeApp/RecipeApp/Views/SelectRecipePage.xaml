@@ -3,14 +3,9 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="RecipeApp.Views.SelectRecipePage"
              xmlns:viewModel="clr-namespace:RecipeApp.ViewModels"
-             xmlns:fontAwesome="clr-namespace:FontAwesome"
              xmlns:ffImageLoading="clr-namespace:FFImageLoading.Forms;assembly=FFImageLoading.Forms"
              Title="{Binding Title}"
              BackgroundColor="{StaticResource SystemBlack}">
-
-    <ContentPage.BindingContext>
-        <viewModel:SelectRecipeViewModel />
-    </ContentPage.BindingContext>
 
     <ContentPage.Content>
         <ScrollView VerticalOptions="FillAndExpand">

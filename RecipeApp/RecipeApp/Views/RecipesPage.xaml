@@ -8,9 +8,9 @@
              Title="{Binding Title}"
              BackgroundColor="{StaticResource SystemBlack}">
 
-    <ContentPage.BindingContext>
+    <!--<ContentPage.BindingContext>
         <local:RecipesViewModel />
-    </ContentPage.BindingContext>
+    </ContentPage.BindingContext>-->
 
     <ContentPage.ToolbarItems>
         <ToolbarItem Command="{Binding AddCommand}"
@@ -74,7 +74,8 @@
               ItemsSource="{Binding Recipes}"
               IsRefreshing="{Binding IsBusy, Mode=OneWay}"
               RefreshCommand="{Binding LoadRecipesCommand}"
-              SelectedItem="{Binding SelectedRecipe, Mode=TwoWay}">
+              SelectedItem="{Binding SelectedRecipe, Mode=TwoWay}"
+              SeparatorVisibility="None">
 
         <ListView.ItemTemplate>
             <DataTemplate x:DataType="model:Recipe">
@@ -88,6 +89,10 @@
                                            Command="{Binding Source={RelativeSource AncestorType={x:Type local:RecipesViewModel}}, Path=RateCommand}" 
                                            CommandParameter="{Binding .}"
                                            Text="Rate"/>
+                                <SwipeItem BackgroundColor="Red"
+                                           Command="{Binding Source={RelativeSource AncestorType={x:Type local:RecipesViewModel}}, Path=DeleteCommand}" 
+                                           CommandParameter="{Binding .}"
+                                           Text="Delete"/>
                             </SwipeItems>
                         </SwipeView.RightItems>
                         <Grid Padding="5">

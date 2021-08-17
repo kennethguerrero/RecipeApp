@@ -1,4 +1,7 @@
-﻿using RecipeApp.Models;
+﻿using RecipeApp.Exceptions;
+using RecipeApp.Helpers;
+using RecipeApp.Managers;
+using RecipeApp.Models;
 using RecipeApp.Services;
 using RecipeApp.Views;
 using System;
@@ -16,38 +19,39 @@ namespace RecipeApp.ViewModels
         public Command LoadRecipesCommand { get; }
         public Command AddCommand { get; }
         public Command<Recipe> ItemTapped { get; }
-        public Command<Recipe> RateCommand { get; }
+        public Command RateCommand { get; }
 
         public Command<Recipe> DeleteCommand { get; }
 
-        IRecipeService recipeService;
+        private const string pageTitle = "Recipes";
+        private readonly IRecipeManager _recipeManager;
+        private readonly IShellHelper _shellHelper;
 
-        public RecipesViewModel()
+        public RecipesViewModel(IRecipeManager recipeManager, IShellHelper shellHelper)
         {
-            Title = "Recipes";
+            _recipeManager = recipeManager;
+            _shellHelper = shellHelper;
 
+            Title = pageTitle;
             Recipes = new ObservableCollection<Recipe>();
-
             LoadRecipesCommand = new Command(async () => await LoadRecipes());
-            AddCommand = new Command(Add);
-            ItemTapped = new Command<Recipe>(Selected);
-            RateCommand = new Command<Recipe>(Rate);
-            DeleteCommand = new Command<Recipe>(Delete);
-
-            recipeService = DependencyService.Get<IRecipeService>();
+            ItemTapped = new Command<Recipe>(async (recipe) => await Selected(recipe));
+            DeleteCommand = new Command<Recipe>(async (recipe) => await Delete(recipe));
+            AddCommand = new Command(async () => await Add());
+            RateCommand = new Command(async () => await Rate());
 
             Initialization = LoadRecipes();
         }
 
-        private async void Add(object obj)
+        public async Task Add()
         {
             if (IsAdmin == false)
             {
-                await Shell.Current.DisplayAlert("Error", "Guest account cannot add recipes", "OK");
+                await _shellHelper.DisplayAlert("Guest account cannot add recipes");
                 return;
             }
 
-            await Shell.Current.GoToAsync(nameof(AddRecipePage));
+            await _shellHelper.GotoAsync(nameof(AddRecipePage));
         }
 
         private Task Initialization { get; set; }
@@ -58,11 +62,16 @@ namespace RecipeApp.ViewModels
             try
             {
                 Recipes.Clear();
-                var recipes = await recipeService.GetRecipes();
+                var recipes = await _recipeManager.GetRecipes();
                 foreach (var recipe in recipes)
                 {
                     Recipes.Add(recipe);
                 }
+                DependencyService.Get<IToast>()?.MakeToast("Load Complete");
+            }
+            catch (NoInternetException)
+            {
+                await _shellHelper.DisplayAlert("No Internet Connection");
             }
             catch (Exception ex)
             {
@@ -72,40 +81,29 @@ namespace RecipeApp.ViewModels
             {
                 IsBusy = false;
             }
-
-            DependencyService.Get<IToast>()?.MakeToast("All Recipes Loaded");
+            
         }
 
-        Recipe previouslySelected;
         Recipe selectedRecipe;
         public Recipe SelectedRecipe
         {
             get => selectedRecipe;
-            set
-            {
-                if (value != null)
-                {
-                    Selected(value);
-                    previouslySelected = value;
-                    value = null;
-                }
-                selectedRecipe = value;
-                OnPropertyChanged();
-            }
+            set => SetProperty(ref selectedRecipe, value, onChanged: async () => await Selected(selectedRecipe));
         }
 
-        async void Selected(Recipe recipe)
+        public async Task Selected(Recipe recipe)
         {
             if (recipe == null)
                 return;
 
-            //await Shell.Current.DisplayAlert("Selected", recipe.RowKey, "OK");
-            await Shell.Current.GoToAsync($"{nameof(RecipeDetailPage)}?{nameof(RecipeDetailViewModel.RecipeId)}={recipe.RowKey}");
+            SelectedRecipe = null;
+
+            await _shellHelper.GotoAsync($"{nameof(RecipeDetailPage)}?{nameof(RecipeDetailViewModel.RecipeId)}={recipe.RowKey}");
         }
 
-        async void Rate(Recipe recipe)
+        public async Task Rate()
         {
-           await Shell.Current.DisplayAlert("Rate", "Feature coming soon.", "OK");
+            await _shellHelper.DisplayAlert("Feature coming soon");
         }
 
         bool isAdmin;
@@ -115,18 +113,16 @@ namespace RecipeApp.ViewModels
             set => SetProperty(ref isAdmin, value);
         }
 
-        async void Delete(Recipe recipe)
+        public async Task Delete(Recipe recipe)
         {
-            if (recipe == null)
-                return;
-
-            var result = await Shell.Current.DisplayAlert("Delete Recipe", "Are you sure you want to delete?", "OK", "Cancel");
-
-            if (result)
+            if (IsAdmin == false)
             {
-                await recipeService.DeleteRecipe(recipe.PartitionKey, recipe.RowKey);
-                await LoadRecipes();
+                await _shellHelper.DisplayAlert("Guest account cannot delete recipes");
+                return;
             }
+
+            await _recipeManager.DeleteRecipe(recipe.PartitionKey, recipe.RowKey);
+            await LoadRecipes();
         }
     }
 }

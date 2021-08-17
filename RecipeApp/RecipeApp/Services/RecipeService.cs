@@ -1,14 +1,11 @@
 ﻿using Newtonsoft.Json;
 using RecipeApp.Models;
-using RecipeApp.Services;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
-using Xamarin.Forms;
 
-[assembly:Dependency(typeof(RecipeService))]
 namespace RecipeApp.Services
 {
     public class RecipeService : IRecipeService
@@ -37,7 +34,7 @@ namespace RecipeApp.Services
             var azureFunction = "https://recipeappfunction.azurewebsites.net/api/GetRecipes";
             var response = await httpClient.GetAsync(azureFunction);
             var json = response.Content.ReadAsStringAsync().Result;
-            var list = JsonConvert.DeserializeObject<ObservableCollection<Recipe>>(json);
+            var list = JsonConvert.DeserializeObject<ObservableCollection<Recipe>>(json).OrderByDescending(r => r.TimeStamp);
 
             return list;
         }

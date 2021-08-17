@@ -1,4 +1,7 @@
-﻿using RecipeApp.Models;
+﻿using RecipeApp.Exceptions;
+using RecipeApp.Helpers;
+using RecipeApp.Managers;
+using RecipeApp.Models;
 using RecipeApp.Services;
 using System;
 using System.Collections.ObjectModel;
@@ -12,26 +15,33 @@ namespace RecipeApp.ViewModels
     {
         public ObservableCollection<Recipe> Recipes { get; }
 
+        public Command LoadRecipesCommand { get; }
+
         public Command SelectRecipeCommand { get; }
 
-        IRecipeService recipeService;
-        public SelectRecipeViewModel()
+        private readonly IRecipeManager _recipeManager;
+        private readonly IShellHelper _shellHelper;
+
+        public SelectRecipeViewModel(IRecipeManager recipeManager, IShellHelper shellHelper)
         {
             Title = "Select Recipe";
             Recipes = new ObservableCollection<Recipe>();
-            SelectRecipeCommand = new Command(Select);
-            recipeService = DependencyService.Get<IRecipeService>();
+            SelectRecipeCommand = new Command(async () => await Select());
 
+            _recipeManager = recipeManager;
+            _shellHelper = shellHelper;
+
+            LoadRecipesCommand = new Command(async () => await LoadRecipes());
             Initialization = LoadRecipes();
         }
 
-        async void Select()
+        public async Task Select()
         {
-            IsBusy = true;
             try
             {
-                Random random = new Random();
+                IsBusy = true;
 
+                Random random = new Random();
                 await Task.Delay(2000);
 
                 int recipesIndex = random.Next(Recipes.Count);
@@ -44,10 +54,13 @@ namespace RecipeApp.ViewModels
                 Directions = recipe.Directions;
                 Image = recipe.Image;
             }
+            catch (NoInternetException)
+            {
+                await _shellHelper.DisplayAlert("No Internet Connection");
+            }
             catch (Exception ex)
             {
                 Debug.WriteLine(ex);
-                throw;
             }
             finally
             {
@@ -56,16 +69,20 @@ namespace RecipeApp.ViewModels
         }
 
         private Task Initialization { get; set; }
-        async Task LoadRecipes()
+        public async Task LoadRecipes()
         {
             try
             {
                 Recipes.Clear();
-                var recipes = await recipeService.GetRecipes();
+                var recipes = await _recipeManager.GetRecipes();
                 foreach (var recipe in recipes)
                 {
                     Recipes.Add(recipe);
                 }
+            }
+            catch (NoInternetException)
+            {
+                await _shellHelper.DisplayAlert("No Internet Connection");
             }
             catch (Exception ex)
             {

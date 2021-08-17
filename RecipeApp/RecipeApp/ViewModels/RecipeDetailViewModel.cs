@@ -1,8 +1,10 @@
-﻿using RecipeApp.Services;
+﻿using RecipeApp.Exceptions;
+using RecipeApp.Helpers;
+using RecipeApp.Managers;
+using RecipeApp.Views;
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Text;
+using System.Threading.Tasks;
 using Xamarin.Forms;
 
 namespace RecipeApp.ViewModels
@@ -10,11 +12,14 @@ namespace RecipeApp.ViewModels
     [QueryProperty(nameof(RecipeId), nameof(RecipeId))]
     public class RecipeDetailViewModel : BaseViewModel
     {
-        IRecipeService recipeService;
-        public RecipeDetailViewModel()
+        private readonly IRecipeManager _recipeManager;
+        private readonly IShellHelper _shellHelper;
+
+        public RecipeDetailViewModel(IRecipeManager recipeManager, IShellHelper shellHelper)
         {
             Title = "Recipe Detail";
-            recipeService = DependencyService.Get<IRecipeService>();
+            _recipeManager = recipeManager;
+            _shellHelper = shellHelper;
         }
 
         string name;
@@ -41,12 +46,8 @@ namespace RecipeApp.ViewModels
         string recipeId;
         public string RecipeId
         {
-            get { return recipeId; }
-            set
-            {
-                recipeId = value;
-                LoadRecipeId(value);
-            }
+            get => recipeId;
+            set => SetProperty(ref recipeId, value, onChanged: async () => await LoadRecipeId(recipeId));
         }
 
         string image;
@@ -57,16 +58,21 @@ namespace RecipeApp.ViewModels
         }
 
         public string RowKey { get; set; }
-        public async void LoadRecipeId(string recipeId)
+        public async Task LoadRecipeId(string recipeId)
         {
             try
             {
-                var recipe = await recipeService.GetRecipe(recipeId);
+                var recipe = await _recipeManager.GetRecipe(recipeId);
                 RowKey = recipe.RowKey;
                 Name = recipe.Name;
                 Ingredients = recipe.Ingredients;
                 Directions = recipe.Directions;
                 Image = recipe.Image;
+            }
+            catch(NoInternetException)
+            {
+                await _shellHelper.DisplayAlert("No Internet Connection");
+                await _shellHelper.GotoAsync($"//{nameof(RecipesPage)}");
             }
             catch (Exception)
             {

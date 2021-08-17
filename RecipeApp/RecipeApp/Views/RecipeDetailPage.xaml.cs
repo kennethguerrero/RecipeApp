@@ -15,6 +15,8 @@ namespace RecipeApp.Views
         public RecipeDetailPage()
         {
             InitializeComponent();
+
+            BindingContext = ServiceLocator.GetRecipeDetailViewModel();
         }
     }
 }

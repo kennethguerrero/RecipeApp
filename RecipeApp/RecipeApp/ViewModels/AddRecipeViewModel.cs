@@ -1,8 +1,11 @@
-﻿using RecipeApp.Models;
-using RecipeApp.Services;
+﻿using RecipeApp.Exceptions;
+using RecipeApp.Helpers;
+using RecipeApp.Managers;
+using RecipeApp.Models;
 using System;
 using System.Collections.Generic;
-using System.Text;
+using System.Diagnostics;
+using System.Threading.Tasks;
 using Xamarin.Forms;
 
 namespace RecipeApp.ViewModels
@@ -12,47 +15,71 @@ namespace RecipeApp.ViewModels
         private string name;
         private string ingredients;
         private string directions;
+        private bool isBlank;
 
         public Command CancelCommand { get; }
         public Command SaveCommand { get; }
 
-        IRecipeService recipeService;
+        private readonly IRecipeManager _recipeManager;
+        private readonly IShellHelper _shellHelper;
 
-        public AddRecipeViewModel()
+        public AddRecipeViewModel(IRecipeManager recipeManager, IShellHelper shellHelper)
         {
             Title = "Add Recipe";
-            CancelCommand = new Command(Cancel);
-            SaveCommand = new Command(Save, ValidateSave);
-            PropertyChanged +=
-                (_, __) => SaveCommand.ChangeCanExecute();
-
-            recipeService = DependencyService.Get<IRecipeService>();
+            CancelCommand = new Command(async () => await Cancel());
+            SaveCommand = new Command(async () => await Save());
+            _recipeManager = recipeManager;
+            _shellHelper = shellHelper;
         }
 
-        private async void Save()
+        public async Task Save()
         {
-            Recipe newRecipe = new Recipe
+            try
             {
-                Name = Name,
-                Ingredients = Ingredients,
-                Directions = Directions,
-                Type = SelectedRecipeType.Value
-            };
-            string message = await recipeService.AddRecipe(newRecipe);
-            await Shell.Current.DisplayAlert("Success!", message, "OK");
-            await Shell.Current.GoToAsync("..");
+                Recipe newRecipe = new Recipe
+                {
+                    Name = Name,
+                    Ingredients = Ingredients,
+                    Directions = Directions,
+                    Type = SelectedRecipeType.Value
+                };
+                string message = await _recipeManager.AddRecipe(newRecipe);
+                await _shellHelper.DisplayAlert($"{message}");
+                await _shellHelper.GotoAsync("..");
+            }
+            catch(NoInternetException)
+            {
+                await _shellHelper.DisplayAlert("No Internet Connection");
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex);
+            }
         }
 
-        private bool ValidateSave()
+        public void ValidateSave()
         {
-            return !string.IsNullOrWhiteSpace(name)
+            if (!string.IsNullOrWhiteSpace(name)
                 && !string.IsNullOrWhiteSpace(ingredients)
-                && !string.IsNullOrWhiteSpace(directions);
+                && !string.IsNullOrWhiteSpace(directions))
+            {
+                IsBlank = false;
+            }
+            else
+            {
+                IsBlank = true;
+            }
         }
 
-        private async void Cancel()
+        public bool IsBlank
         {
-            await Shell.Current.GoToAsync("..");
+            get => isBlank;
+            set => SetProperty(ref isBlank, value);
+        }
+
+        public async Task Cancel()
+        {
+            await _shellHelper.GotoAsync("..");
         }
 
         public string Name

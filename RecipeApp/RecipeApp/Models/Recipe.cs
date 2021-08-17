@@ -8,6 +8,7 @@ namespace RecipeApp.Models
     {
         public string RowKey { get; set; }
         public string PartitionKey { get; set; }
+        public DateTime TimeStamp { get; set; }
         public string Name { get; set; }
         public string Ingredients { get; set; }
         public string Directions { get; set; }

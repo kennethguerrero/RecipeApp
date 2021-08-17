@@ -1,7 +1,4 @@
 ﻿using RecipeApp.Views;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using Xamarin.Forms;
 
 namespace RecipeApp.ViewModels
@@ -27,7 +24,7 @@ namespace RecipeApp.ViewModels
             }
             else
             {
-                await Shell.Current.DisplayAlert("Login Error", "Incorrect username or password.", "OK");
+                await Shell.Current.DisplayAlert(null, "Incorrect username or password.", "OK");
             }
         }
 
