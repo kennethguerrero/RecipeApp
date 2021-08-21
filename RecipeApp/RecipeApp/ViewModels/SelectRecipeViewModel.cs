@@ -2,7 +2,6 @@
 using RecipeApp.Helpers;
 using RecipeApp.Managers;
 using RecipeApp.Models;
-using RecipeApp.Services;
 using System;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
@@ -40,7 +39,6 @@ namespace RecipeApp.ViewModels
             try
             {
                 IsBusy = true;
-
                 Random random = new Random();
                 await Task.Delay(2000);
 

@@ -15,7 +15,6 @@ namespace RecipeApp.ViewModels
         private string name;
         private string ingredients;
         private string directions;
-        private bool isBlank;
 
         public Command CancelCommand { get; }
         public Command SaveCommand { get; }
@@ -36,16 +35,25 @@ namespace RecipeApp.ViewModels
         {
             try
             {
-                Recipe newRecipe = new Recipe
+                if (!string.IsNullOrWhiteSpace(name)
+                && !string.IsNullOrWhiteSpace(ingredients)
+                && !string.IsNullOrWhiteSpace(directions))
                 {
-                    Name = Name,
-                    Ingredients = Ingredients,
-                    Directions = Directions,
-                    Type = SelectedRecipeType.Value
-                };
-                string message = await _recipeManager.AddRecipe(newRecipe);
-                await _shellHelper.DisplayAlert($"{message}");
-                await _shellHelper.GotoAsync("..");
+                    Recipe newRecipe = new Recipe
+                    {
+                        Name = Name,
+                        Ingredients = Ingredients,
+                        Directions = Directions,
+                        Type = SelectedRecipeType.Value
+                    };
+                    string message = await _recipeManager.AddRecipe(newRecipe);
+                    await _shellHelper.DisplayAlert($"{message}");
+                    await _shellHelper.GotoAsync("..");
+                }
+                else
+                {
+                    return;
+                }
             }
             catch(NoInternetException)
             {
@@ -55,26 +63,6 @@ namespace RecipeApp.ViewModels
             {
                 Debug.WriteLine(ex);
             }
-        }
-
-        public void ValidateSave()
-        {
-            if (!string.IsNullOrWhiteSpace(name)
-                && !string.IsNullOrWhiteSpace(ingredients)
-                && !string.IsNullOrWhiteSpace(directions))
-            {
-                IsBlank = false;
-            }
-            else
-            {
-                IsBlank = true;
-            }
-        }
-
-        public bool IsBlank
-        {
-            get => isBlank;
-            set => SetProperty(ref isBlank, value);
         }
 
         public async Task Cancel()

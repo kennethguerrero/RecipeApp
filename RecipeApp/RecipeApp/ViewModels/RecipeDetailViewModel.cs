@@ -72,7 +72,7 @@ namespace RecipeApp.ViewModels
             catch(NoInternetException)
             {
                 await _shellHelper.DisplayAlert("No Internet Connection");
-                await _shellHelper.GotoAsync($"//{nameof(RecipesPage)}");
+                await _shellHelper.GotoAsync("..");
             }
             catch (Exception)
             {

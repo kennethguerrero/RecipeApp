@@ -57,10 +57,9 @@ namespace RecipeApp.ViewModels
         private Task Initialization { get; set; }
         public async Task LoadRecipes()
         {
-            IsBusy = true;
-
             try
             {
+                IsBusy = true;
                 Recipes.Clear();
                 var recipes = await _recipeManager.GetRecipes();
                 foreach (var recipe in recipes)
@@ -106,23 +105,35 @@ namespace RecipeApp.ViewModels
             await _shellHelper.DisplayAlert("Feature coming soon");
         }
 
+        public async Task Delete(Recipe recipe)
+        {
+            try
+            {
+                if (recipe == null)
+                    return;
+                
+                if (IsAdmin == false)
+                    await _shellHelper.DisplayAlert("Guest account cannot delete recipes");
+
+                await _recipeManager.DeleteRecipe(recipe.PartitionKey, recipe.RowKey);
+                await _shellHelper.DisplayAlert("Recipe has been deleted");
+                await LoadRecipes();
+            }
+            catch(NoInternetException)
+            {
+                await _shellHelper.DisplayAlert("No Internet Connection");
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine(ex);
+            }
+        }
+
         bool isAdmin;
         public bool IsAdmin
         {
             get => isAdmin;
             set => SetProperty(ref isAdmin, value);
-        }
-
-        public async Task Delete(Recipe recipe)
-        {
-            if (IsAdmin == false)
-            {
-                await _shellHelper.DisplayAlert("Guest account cannot delete recipes");
-                return;
-            }
-
-            await _recipeManager.DeleteRecipe(recipe.PartitionKey, recipe.RowKey);
-            await LoadRecipes();
         }
     }
 }

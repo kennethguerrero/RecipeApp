@@ -1,7 +1,6 @@
 ﻿using Newtonsoft.Json;
 using RecipeApp.Models;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -33,20 +32,16 @@ namespace RecipeApp.Services
 
             var azureFunction = "https://recipeappfunction.azurewebsites.net/api/GetRecipes";
             var response = await httpClient.GetAsync(azureFunction);
-            var json = response.Content.ReadAsStringAsync().Result;
-            var list = JsonConvert.DeserializeObject<ObservableCollection<Recipe>>(json).OrderByDescending(r => r.TimeStamp);
+            var json = await response.Content.ReadAsStringAsync();
+            var list = JsonConvert.DeserializeObject<IEnumerable<Recipe>>(json).OrderByDescending(r => r.TimeStamp);
 
             return list;
         }
 
         public async Task<Recipe> GetRecipe(string id)
         {
-            Init();
-
-            var azureFunction = "https://recipeappfunction.azurewebsites.net/api/GetRecipes";
-            var response = await httpClient.GetAsync(azureFunction);
-            var json = response.Content.ReadAsStringAsync().Result;
-            var recipe = JsonConvert.DeserializeObject<ObservableCollection<Recipe>>(json).Where(r => r.RowKey.Equals(id));
+            var list = await GetRecipes();
+            var recipe = list.Where(r => r.RowKey.Equals(id));
             var selectedRecipe = recipe.FirstOrDefault();
             return selectedRecipe;
         }
