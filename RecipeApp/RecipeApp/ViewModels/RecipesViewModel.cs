@@ -110,10 +110,14 @@ namespace RecipeApp.ViewModels
             try
             {
                 if (recipe == null)
+                {
                     return;
-                
-                if (IsAdmin == false)
+                }
+                else if (IsAdmin == false)
+                {
                     await _shellHelper.DisplayAlert("Guest account cannot delete recipes");
+                    return;
+                }
 
                 await _recipeManager.DeleteRecipe(recipe.PartitionKey, recipe.RowKey);
                 await _shellHelper.DisplayAlert("Recipe has been deleted");

@@ -25,7 +25,7 @@ namespace RecipeApp.ViewModels
         {
             Title = "Select Recipe";
             Recipes = new ObservableCollection<Recipe>();
-            SelectRecipeCommand = new Command(async () => await Select());
+            SelectRecipeCommand = new Command(async () => await GetRandomNumber());
 
             _recipeManager = recipeManager;
             _shellHelper = shellHelper;
@@ -34,19 +34,11 @@ namespace RecipeApp.ViewModels
             Initialization = LoadRecipes();
         }
 
-        public async Task Select()
+        public async Task Select(int recipeIndex)
         {
             try
             {
-                IsBusy = true;
-                Random random = new Random();
-                await Task.Delay(2000);
-
-                int recipesIndex = random.Next(Recipes.Count);
-                if (recipesIndex == -1)
-                    return;
-
-                var recipe = Recipes[recipesIndex];
+                var recipe = Recipes[recipeIndex];
                 Name = recipe.Name;
                 Ingredients = recipe.Ingredients;
                 Directions = recipe.Directions;
@@ -64,6 +56,21 @@ namespace RecipeApp.ViewModels
             {
                 IsBusy = false;
             }
+        }
+
+        int recipeIndex;
+        private async Task GetRandomNumber()
+        {
+            IsBusy = true;
+            Random random = new Random();
+
+            await Task.Delay(2000);
+
+            recipeIndex = random.Next(Recipes.Count);
+            if (recipeIndex == -1)
+                return;
+
+            await Select(recipeIndex);
         }
 
         private Task Initialization { get; set; }
